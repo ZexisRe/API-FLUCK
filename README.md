@@ -87,8 +87,8 @@ Call before any KeyAuth-dependent logic:
 ```objc
 [[KeyAuthSystem shared] start];                           // Initialize
 
-[obj getPackageVersion];                                  // e.g. "1.0.1"
-[obj getAppID];                                           // e.g. "com.dts.samwill"
+[obj getPackageVersion];                                 
+[obj getAppID];                                          
 [obj getAppDisplayName];                                  // Display name
 [obj getKey];                                             // License key (if set)
 

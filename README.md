@@ -88,7 +88,7 @@ Call before any KeyAuth-dependent logic:
 [[KeyAuthSystem shared] start];                           // Initialize
 
 [obj getPackageVersion];                                 
-[obj getAppID];                                          
+[obj getAppID];                                           // e.g. "com.dts.samwill"
 [obj getAppDisplayName];                                  // Display name
 [obj getKey];                                             // License key (if set)
 
@@ -107,6 +107,19 @@ Call before any KeyAuth-dependent logic:
 | Compile errors | Add `CoreTelephony` framework |
 | Validation fails | Check app ID, version, and encoded bytes match your package |
 | Injection detected | Increase `KEYAUTH_MAX_DYLIBS` if using legitimate dylibs |
+
+---
+
+## MYDash
+
+**MYDash.ipa** — dashboard for devs. Create bans, manage keys, and full control over your packages.
+
+---
+
+## Contact
+
+- **Discord:** @zexisyy_
+- **Telegram:** @zexisyy
 
 ---
 

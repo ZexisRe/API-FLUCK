@@ -11,6 +11,7 @@ License validation and anti-tamper SDK for iOS apps. No source code—binary onl
 | `libKeyAuth.a` | Static library (arm64) |
 | `KeyAuth.h` | Public API header |
 | `KeyAuthConfig.h` | Config declarations (define values in your app) |
+| `themeAPI.mm` | Optional theme provider for KeyAuth UI |
 
 ---
 
@@ -82,6 +83,65 @@ Call before any KeyAuth-dependent logic:
 
 ---
 
+## Theme API (themeAPI.mm)
+
+`themeAPI.mm` is an optional Objective‑C category that provides theme colors to KeyAuth’s built‑in UI. If your project has no menu/theme system (e.g. no `ModMenuViewController`), include `themeAPI.mm` so KeyAuth gets valid colors and does not crash.
+
+### When to use
+
+- **Use it** when KeyAuth shows UI (login, validation) and your app does not already supply theme methods on `KeyAuthSystem`.
+- **Skip it** when your main menu (e.g. `Draw.mm` with `ModMenuViewController`) already implements the theme methods KeyAuth expects.
+
+### Add to build
+
+Include `themeAPI.mm` in your target’s compile sources (Xcode) or in `Makefile`:
+
+```
+$(TWEAK_NAME)_FILES = ... API/themeAPI.mm ...
+```
+
+### Theme keys (NSUserDefaults)
+
+| Key | Type | Values | Default |
+|-----|------|--------|---------|
+| `ModMenuDarkMode` | `BOOL` | `YES` = dark, `NO` = light | `YES` |
+| `ModMenuColorTheme` | `NSInteger` | `0` Red, `1` Blue, `2` Green, `3` Pink | `0` |
+| `ModMenuWinterTheme` | `BOOL` | `YES` = winter style | `NO` |
+| `ModMenuLiquidTheme` | `BOOL` | `YES` = liquid glass style | `NO` |
+
+### Methods provided
+
+| Method | Purpose |
+|--------|---------|
+| `isDarkMode` | Dark vs light mode |
+| `isWinterTheme` | Winter theme active |
+| `isLiquidTheme` | Liquid/glass theme active |
+| `accentColor` | Main accent (buttons, highlights) |
+| `backgroundColor` | Panel background |
+| `textColor` | Primary text |
+| `secondaryTextColor` | Secondary/muted text |
+| `pillColor` | Pill/button background |
+| `checkboxOffColor` | Unchecked checkbox |
+| `glowColor` | Glow/shadow color |
+| `borderColor` | Panel border |
+| `separatorColor` | Divider lines |
+| `pillBorderColor` | Pill border |
+
+### Enabling Winter or Liquid theme
+
+Set the keys **before** KeyAuth shows UI:
+
+```objc
+[[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"ModMenuWinterTheme"];
+[[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"ModMenuLiquidTheme"];
+[[NSUserDefaults standardUserDefaults] synchronize];
+```
+
+- **Winter:** Ice‑blue accent, cool backgrounds.
+- **Liquid/Glass:** Semi‑transparent backgrounds and pills for a frosted look.
+
+---
+
 ## API
 
 ```objc
@@ -107,6 +167,7 @@ Call before any KeyAuth-dependent logic:
 | Compile errors | Add `CoreTelephony` framework |
 | Validation fails | Check app ID, version, and encoded bytes match your package |
 | Injection detected | Increase `KEYAUTH_MAX_DYLIBS` if using legitimate dylibs |
+| KeyAuth UI crash / bad colors | Add `themeAPI.mm` to the build and ensure theme keys are set before KeyAuth runs |
 
 ---
 
